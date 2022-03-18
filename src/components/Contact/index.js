@@ -1,15 +1,38 @@
 import React, { useState } from "react";
-
+import { validateEmail } from "../../utils/helpers"
 
 function ContactForm() {
 
     const [formState, setFormState] = useState({ name: '', email: '', message: '' })
     const { name, email, message } = formState
+    const [errorMessage, setErrorMessage] = useState('');
     //jsx
 
     function handleChange(e) {
-        setFormState({ ...formState, [e.target.name]: e.target.value })
+
+        if (e.target.name === 'email') {
+            const isValid = validateEmail(e.target.value);
+            //console.log(isValid);
+            //isValid conditional Statement
+            if (!isValid) {
+                setErrorMessage('Your email is invalid')
+            } else {
+                setErrorMessage('');
+            }
+        }
+        else {
+            if (!e.target.value.length) {
+                setErrorMessage(`${e.target.name} is required.`);
+            } else {
+                setErrorMessage('');
+            }
+        }
+
+        if (!errorMessage) {
+            setFormState({ ...formState, [e.target.name]: e.target.value })
+        }
         //console.log(formState);
+        //console.log('errorMessage:', errorMessage);
     }
 
     function handleSubmit(e) {
@@ -27,7 +50,7 @@ function ContactForm() {
                 </div>
                 <div>
                     <label htmlFor="email">Email address:</label>
-                    <input type="text" defaultValue={email} onChange={handleChange} name="email" />
+                    <input type="text" defaultValue={email} onBlur={handleChange} name="email" />
                 </div>
                 <div>
                     <label htmlFor="message">Message:</label>
@@ -35,6 +58,11 @@ function ContactForm() {
                 </div>
 
                 <button type="submit">Submit</button>
+                {errorMessage && (
+                    <div>
+                        <p className="error-text">{errorMessage}</p>
+                    </div>
+                )}
             </form>
         </section>
     );
