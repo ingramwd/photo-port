@@ -4,26 +4,14 @@ import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import Nav from '..';
 
-const categories = [
-  {
-    name: 'portraits', description: 'portraits of people in my life'
-  }
-]
-const mockCurrentCategory = jest.fn();
-const mockSetCurrentCategory = jest.fn();
-
 afterEach(cleanup);
 
-describe('Nav component', () => {
+describe('Nav component renders', () => {
   it('renders', () => {
-    render(<Nav
-      categories={categories}
-      mockSetCurrentCategory={mockSetCurrentCategory}
-      currentCategory={mockCurrentCategory}
-    />);
+    render(<Nav />);
   });
 
-  it('matches snapshot', (props) => {
+  it('matches snapshot', () => {
     const { asFragment } = render(<Nav />);
 
     expect(asFragment()).toMatchSnapshot();
@@ -43,7 +31,7 @@ describe('links are visible', () => {
     const { getByTestId } = render(<Nav />);
 
     expect(getByTestId('link')).toHaveTextContent('Oh Snap!');
-    expect(getByTestId('about')).toHaveTextContentf('About me');
+    expect(getByTestId('about')).toHaveTextContent('About me');
   });
 
 })
